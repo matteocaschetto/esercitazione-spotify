@@ -1,20 +1,26 @@
-import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col } from "react-bootstrap";
 import Sidebar from "./components/Sidebar";
 import MusicSection from "./components/MusicSection";
-import Player from "./components/Player";
 
 const App = () => {
   return (
     <Container fluid className="my-0 px-0 bg-black">
       <Row>
-        <Col xs={3} md={3} lg={3}>
+        <Col xs={2} md={2} lg={2} className="p-0">
           <Sidebar />
         </Col>
-        <Col xs={9} md={9} lg={9}>
-          <MusicSection />
-          <Player />
+
+        <Col xs={10} md={10} lg={10} className="p-0">
+          <div
+            style={{
+              height: "100vh",
+              overflowY: "auto",
+              paddingBottom: "60px"
+            }}
+          >
+            <MusicSection />
+          </div>
         </Col>
       </Row>
     </Container>
