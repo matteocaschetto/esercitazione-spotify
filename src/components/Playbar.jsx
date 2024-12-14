@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { Container, Row, Col, Button, ProgressBar } from "react-bootstrap";
 import shuffle from "../assets/playerbuttons/shuffle.png";
 import prev from "../assets/playerbuttons/prev.png";
@@ -7,31 +7,12 @@ import next from "../assets/playerbuttons/next.png";
 import repeat from "../assets/playerbuttons/repeat.png";
 
 const Playbar = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-
-  const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleShuffle = () => console.log("Shuffle");
-  const handlePrevious = () => console.log("Previous");
-  const handleNext = () => console.log("Next");
-  const handleRepeat = () => console.log("Repeat");
-
-  React.useEffect(() => {
-    if (isPlaying && progress < 100) {
-      const interval = setInterval(() => {
-        setProgress((prev) => prev + 1);
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [isPlaying, progress]);
+  const currentSong = useSelector((state) => state.song.currentSong);
 
   return (
     <Container
       fluid
-      className="fixed-bottom bg-black "
+      className="fixed-bottom bg-black"
       style={{
         position: "fixed",
         bottom: 0,
@@ -45,28 +26,43 @@ const Playbar = () => {
         <Col xs={10} md={8}>
           <div className="d-flex flex-column align-items-center pb-3">
             <div className="d-flex justify-content-center">
-              <Button variant="link" onClick={handleShuffle}>
+              <Button variant="link">
                 <img src={shuffle} alt="shuffle" width="20%" />
               </Button>
-              <Button variant="link" onClick={handlePrevious}>
+              <Button variant="link">
                 <img src={prev} alt="previous" width="20%" />
               </Button>
-              <Button variant="link" onClick={handlePlayPause}>
+              <Button variant="link">
                 <img src={play} alt="play/pause" width="20%" />
               </Button>
-              <Button variant="link" onClick={handleNext}>
+              <Button variant="link">
                 <img src={next} alt="next" width="20%" />
               </Button>
-              <Button variant="link" onClick={handleRepeat}>
+              <Button variant="link">
                 <img src={repeat} alt="repeat" width="20%" />
               </Button>
             </div>
+
             <ProgressBar
-              now={progress}
               max={100}
               className="w-75 mt-3"
               style={{ height: "5px", backgroundColor: "#999" }}
             />
+            {currentSong && (
+              <div className="mt-3 text-white text-center d-flex align-items-center">
+                <img
+                  src={currentSong.album.cover_small}
+                  alt={currentSong.title}
+                  className="me-3 mb-3"
+                  style={{ maxWidth: "80px", height: "auto" }}
+                />
+
+                <div className="d-flex flex-column">
+                  <h5>{currentSong.title}</h5>
+                  <p>{currentSong.artist.name}</p>
+                </div>
+              </div>
+            )}
           </div>
         </Col>
       </Row>

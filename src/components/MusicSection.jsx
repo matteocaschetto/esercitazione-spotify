@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import { Row, Col, Card } from "react-bootstrap";
+import { Row, Col, Card, Container } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { setCurrentSong } from "../redux/songSlice";
 import Playbar from "./Playbar";
 
 const MusicSection = () => {
@@ -7,6 +9,7 @@ const MusicSection = () => {
   const [popSongs, setPopSongs] = useState([]);
   const [jazzSongs, setJazzSongs] = useState([]);
   const [error, setError] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchSongs = async (genre, setter) => {
@@ -29,15 +32,19 @@ const MusicSection = () => {
     fetchSongs("jazz", setJazzSongs);
   }, []);
 
+  const handleSongClick = (song) => {
+    dispatch(setCurrentSong(song));
+  };
+
   return (
-    <div
-      className="music-section bg-black text-white py-4"
+    <Container
+      className="text-white pt-4"
       style={{
         background:
           "linear-gradient(90deg, rgb(63, 86, 119) 0%, rgba(33, 44, 61, 1) 42%, rgb(15, 21, 29) 100%)",
         minHeight: "100vh",
         color: "white",
-        padding: "2rem"
+        padding: "0"
       }}
     >
       <Row className="justify-content-center">
@@ -66,7 +73,11 @@ const MusicSection = () => {
             <h2 className="mb-4">Rock Classics</h2>
             <Row xs={1} sm={2} lg={3} xl={4} className="me-4">
               {rockSongs.slice(0, 4).map((song) => (
-                <Col key={song.id} className="mb-4">
+                <Col
+                  key={song.id}
+                  className="mb-4"
+                  onClick={() => handleSongClick(song)}
+                >
                   <Card className="border-0 text-center bg-transparent fs-6">
                     <Card.Img
                       variant="top"
@@ -85,38 +96,16 @@ const MusicSection = () => {
             </Row>
           </Col>
         </Row>
-
         <Row className="justify-content-center mt-2">
           <Col xs={12} md={9}>
-            <h2 className="mb-4">Pop Hits</h2>
-            <Row xs={1} sm={2} lg={3} xl={4} className="me-4">
-              {popSongs.slice(0, 4).map((song) => (
-                <Col key={song.id} className="mb-4">
-                  <Card className="border-0 text-center bg-transparent fs-6">
-                    <Card.Img
-                      variant="top"
-                      src={song.album.cover_medium}
-                      alt={song.title}
-                      className="w-100 rounded-0"
-                      style={{ objectFit: "cover" }}
-                    />
-                    <Card.Body className="text-white custom-card-body border-0">
-                      <Card.Title className="fs-6">{song.title}</Card.Title>
-                      <Card.Text className="fs-6">{song.artist.name}</Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          </Col>
-        </Row>
-
-        <Row className="justify-content-center mt-2">
-          <Col xs={12} md={9}>
-            <h2 className="mb-4">Jazz Vibes</h2>
+            <h2 className="mb-4">Jazz</h2>
             <Row xs={1} sm={2} lg={3} xl={4} className="me-4">
               {jazzSongs.slice(0, 4).map((song) => (
-                <Col key={song.id} className="mb-4">
+                <Col
+                  key={song.id}
+                  className="mb-4"
+                  onClick={() => handleSongClick(song)}
+                >
                   <Card className="border-0 text-center bg-transparent fs-6">
                     <Card.Img
                       variant="top"
@@ -135,13 +124,42 @@ const MusicSection = () => {
             </Row>
           </Col>
         </Row>
+        <Row className="justify-content-center mt-2">
+          <Col xs={12} md={9}>
+            <h2 className="mb-4">Pop Playlist</h2>
+            <Row xs={1} sm={2} lg={3} xl={4} className="me-4">
+              {popSongs.slice(0, 4).map((song) => (
+                <Col
+                  key={song.id}
+                  className="mb-4"
+                  onClick={() => handleSongClick(song)}
+                >
+                  <Card className="border-0 text-center bg-transparent fs-6">
+                    <Card.Img
+                      variant="top"
+                      src={song.album.cover_medium}
+                      alt={song.title}
+                      className="w-100 rounded-0"
+                      style={{ objectFit: "cover" }}
+                    />
+                    <Card.Body className="text-white custom-card-body border-0">
+                      <Card.Title className="fs-6">{song.title}</Card.Title>
+                      <Card.Text className="fs-6">{song.artist.name}</Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          </Col>
+        </Row>
+
         <Row>
           <Col>
             <Playbar />
           </Col>
         </Row>
       </div>
-    </div>
+    </Container>
   );
 };
 

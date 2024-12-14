@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Navbar,
   Container,
@@ -10,6 +11,10 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import logo from "../assets/image/logo.png";
 
 const Sidebar = () => {
+  const [showSidebar, setShowSidebar] = useState(false);
+
+  const toggleSidebar = () => setShowSidebar(!showSidebar);
+
   return (
     <Navbar
       bg="black"
@@ -21,7 +26,6 @@ const Sidebar = () => {
         top: 0,
         left: 0,
         height: "100vh",
-
         zIndex: 1000,
         backgroundColor: "#343a40",
         padding: 0
@@ -35,6 +39,14 @@ const Sidebar = () => {
           <img src={logo} alt="Spotify Logo" width="131" height="40" />
         </Navbar.Brand>
 
+        {/* Navbar Toggle per il collapse */}
+        <Navbar.Toggle
+          aria-controls="basic-navbar-nav"
+          onClick={toggleSidebar}
+          className="text-white"
+        />
+
+        {/* Sidebar contenente le voci di navigazione */}
         <Navbar.Collapse
           id="basic-navbar-nav"
           className="d-flex flex-column align-items-start flex-grow-1 mb-3"
@@ -47,7 +59,7 @@ const Sidebar = () => {
                 color: "#fff"
               }}
             >
-              <i className="bi bi-house-door-fill me-2 "></i> Home
+              <i className="bi bi-house-door-fill me-2"></i> Home
             </Nav.Link>
             <Nav.Link
               href="#"
@@ -61,7 +73,7 @@ const Sidebar = () => {
           </Nav>
 
           <InputGroup>
-            <Form.Control type="text" placeholder="search" />
+            <Form.Control type="text" placeholder="Search" />
             <Button className="bg-dark text-white border-white">Go</Button>
           </InputGroup>
         </Navbar.Collapse>
