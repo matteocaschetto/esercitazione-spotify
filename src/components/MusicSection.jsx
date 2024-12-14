@@ -136,7 +136,7 @@ const MusicSection = () => {
           </Col>
         </Row>
         <Row>
-          <Col xs={12} md={8} lg={8}>
+          <Col>
             <Playbar />
           </Col>
         </Row>

@@ -1,82 +1,76 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Button, ProgressBar } from "react-bootstrap";
-import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
+import shuffle from "../assets/playerbuttons/shuffle.png";
+import prev from "../assets/playerbuttons/prev.png";
+import play from "../assets/playerbuttons/play.png";
+import next from "../assets/playerbuttons/next.png";
+import repeat from "../assets/playerbuttons/repeat.png";
 
-const Playbar = ({ song, isPlaying, onPlayPause, onSeek, onVolumeChange }) => {
-  const [volume, setVolume] = useState(100);
+const Playbar = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  const handleSeek = (e) => {
-    const newProgress = e.target.value;
-    setProgress(newProgress);
-    onSeek(newProgress);
+  const handlePlayPause = () => {
+    setIsPlaying(!isPlaying);
   };
 
-  const handleVolumeChange = (e) => {
-    const newVolume = e.target.value;
-    setVolume(newVolume);
-    onVolumeChange(newVolume);
-  };
+  const handleShuffle = () => console.log("Shuffle");
+  const handlePrevious = () => console.log("Previous");
+  const handleNext = () => console.log("Next");
+  const handleRepeat = () => console.log("Repeat");
+
+  React.useEffect(() => {
+    if (isPlaying && progress < 100) {
+      const interval = setInterval(() => {
+        setProgress((prev) => prev + 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [isPlaying, progress]);
 
   return (
-    <div
-      className="px-5 py-2"
+    <Container
+      fluid
+      className="fixed-bottom bg-black "
       style={{
-        background:
-          "linear-gradient(90deg, rgb(63, 86, 119) 0%, rgba(33, 44, 61, 1) 42%, rgb(15, 21, 29) 100%)",
         position: "fixed",
         bottom: 0,
-        width: "80%",
-        color: "white"
+        left: 0,
+        right: 0,
+        margin: 0,
+        zIndex: 999
       }}
     >
-      <Container>
-        <Row className="align-items-center">
-          <Col xs={6} md={8}>
-            <h6>{song ? song.title : "Song Title"}</h6>
-            <p>{song ? song.artist : "Artist Name"}</p>
-          </Col>
-
-          <Col xs={6} md={2} className="d-flex align-items-center">
+      <Row className="h-100 justify-content-center align-items-center">
+        <Col xs={10} md={8}>
+          <div className="d-flex flex-column align-items-center pb-3">
+            <div className="d-flex justify-content-center">
+              <Button variant="link" onClick={handleShuffle}>
+                <img src={shuffle} alt="shuffle" width="20%" />
+              </Button>
+              <Button variant="link" onClick={handlePrevious}>
+                <img src={prev} alt="previous" width="20%" />
+              </Button>
+              <Button variant="link" onClick={handlePlayPause}>
+                <img src={play} alt="play/pause" width="20%" />
+              </Button>
+              <Button variant="link" onClick={handleNext}>
+                <img src={next} alt="next" width="20%" />
+              </Button>
+              <Button variant="link" onClick={handleRepeat}>
+                <img src={repeat} alt="repeat" width="20%" />
+              </Button>
+            </div>
             <ProgressBar
               now={progress}
               max={100}
-              onClick={handleSeek}
-              style={{
-                cursor: "pointer",
-                flexGrow: 1
-              }}
+              className="w-75 mt-3"
+              style={{ height: "5px", backgroundColor: "#999" }}
             />
-          </Col>
-
-          <Col xs={12} md={2} className="d-flex justify-content-between">
-            <Button
-              variant="link"
-              onClick={onPlayPause}
-              style={{ color: "#fff" }}
-            >
-              {isPlaying ? <FaPause size={24} /> : <FaPlay size={24} />}
-            </Button>
-
-            <div className="d-flex align-items-center me-4">
-              <FaVolumeMute size={18} style={{ marginRight: "8px" }} />
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={volume}
-                onChange={handleVolumeChange}
-                style={{
-                  width: "100px",
-                  marginRight: "10px"
-                }}
-              />
-              <FaVolumeUp size={18} />
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
